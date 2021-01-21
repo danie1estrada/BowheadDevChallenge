@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/wellnessTrackingFragment"
+        android:icon="@drawable/icon_home"
+        android:title="@string/title_wellness_tracking" />
+    <item
+        android:id="@+id/answerLogsFragment"
+        android:icon="@drawable/icon_logs"
+        android:title="@string/title_answer_logs" />
+</menu>

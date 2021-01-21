@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_home"
+    app:startDestination="@id/wellnessTrackingFragment">
+
+    <fragment
+        android:id="@+id/wellnessTrackingFragment"
+        android:name="com.daniel.estrada.mobilewellnessdapp.screens.home.WellnessTrackingFragment"
+        android:label="fragment_wellness_tracking"
+        tools:layout="@layout/fragment_wellness_tracking" />
+    <fragment
+        android:id="@+id/answerLogsFragment"
+        android:name="com.daniel.estrada.mobilewellnessdapp.screens.home.AnswerLogsFragment"
+        android:label="fragment_answer_logs"
+        tools:layout="@layout/fragment_answer_logs" />
+</navigation>
