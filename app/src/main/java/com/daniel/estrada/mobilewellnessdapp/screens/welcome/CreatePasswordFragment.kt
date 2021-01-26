@@ -1,23 +1,37 @@
 package com.daniel.estrada.mobilewellnessdapp.screens.welcome
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.daniel.estrada.mobilewellnessdapp.R
+import com.daniel.estrada.mobilewellnessdapp.databinding.FragmentCreatePasswordBinding
+import com.daniel.estrada.mobilewellnessdapp.viewmodels.PasswordViewModel
 import com.google.android.material.button.MaterialButton
 
 
 class CreatePasswordFragment : Fragment() {
 
+    private val viewModel: PasswordViewModel by viewModels()
+    private lateinit var binding: FragmentCreatePasswordBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_password, container, false)
+        binding = FragmentCreatePasswordBinding.inflate(inflater, container, false)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
