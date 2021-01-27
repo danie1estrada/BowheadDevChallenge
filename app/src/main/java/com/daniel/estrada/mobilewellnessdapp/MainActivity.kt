@@ -27,13 +27,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setup() {
-        repository = Repository.getInstance(application)
         setupBouncyCastle()
         createNotificationChannel()
 
         val sharedPref = getSharedPreferences( getString(R.string.preference_app_data), Context.MODE_PRIVATE)
-        if (!sharedPref.getBoolean(getString(R.string.is_first_experience), true))
+        if (!sharedPref.getBoolean(getString(R.string.is_first_experience), true)) {
+            repository = Repository.getInstance(application)
             listenUserRewards()
+        }
     }
 
     private fun setupBouncyCastle() {

@@ -25,7 +25,7 @@ class Repository private constructor(val context: Application){
 
     private val web3j = Web3j.build(HttpService("$BASE_URL"))
     private var credentials: Credentials? = null
-    private val contract: BowheadDevChallenge
+    private var contract: BowheadDevChallenge? = null
     private val gasProvider = object: ContractGasProvider {
         val GAS_PRICE = BigInteger.valueOf(20000000000)
         val GAS_LIMIT = BigInteger.valueOf(6721975)
@@ -36,13 +36,16 @@ class Repository private constructor(val context: Application){
         override fun getGasLimit(): BigInteger = GAS_LIMIT
     }
 
-    init {
-        contract = BowheadDevChallenge.load(
-            CONTRACT_ADDRESS,
-            web3j,
-            loadCredentials(),
-            gasProvider
-        )
+    private fun loadContract(): BowheadDevChallenge? {
+        if (contract == null) {
+            contract = BowheadDevChallenge.load(
+                CONTRACT_ADDRESS,
+                web3j,
+                loadCredentials(),
+                gasProvider
+            )
+        }
+        return contract
     }
 
     private fun loadCredentials(): Credentials? {
@@ -78,18 +81,22 @@ class Repository private constructor(val context: Application){
         web3j,
         Credentials.create(MASTER_ACCOUNT_PK),
         loadCredentials()!!.address,
-        BigDecimal(500000000000000000),
+        BigDecimal(100000000000000000),
         Convert.Unit.WEI
     ).send()
 
-    fun registerUser(): TransactionReceipt? = contract.registerUser(BigInteger.valueOf(1)).send()
+    fun registerUser(): TransactionReceipt? {
+        return loadContract()?.registerUser(BigInteger.valueOf(1))?.send()
+    }
 
-    fun addHealthData(data: ByteArray): TransactionReceipt? = contract.addHealthData(data).send()
+    fun addHealthData(data: ByteArray): TransactionReceipt? {
+        return loadContract()?.addHealthData(data)?.send()
+    }
 
-    fun getHealthData(): MutableList<Any?>? = contract.healthData.send()
+    fun getHealthData(): MutableList<Any?>? = loadContract()?.healthData?.send()
 
     fun newEarningsEvent(): Flowable<BowheadDevChallenge.NewUserEarningsEventResponse>? {
-        return contract.newUserEarningsEventFlowable(
+        return loadContract()?.newUserEarningsEventFlowable(
             DefaultBlockParameterName.EARLIEST,
             DefaultBlockParameterName.LATEST
         )
