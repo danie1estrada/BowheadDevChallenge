@@ -6,35 +6,17 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import com.daniel.estrada.mobilewellnessdapp.repositories.Repository
-import com.daniel.estrada.mobilewellnessdapp.utils.sendNotification
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.security.Provider
 import java.security.Security
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var repository: Repository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setup()
-    }
-
-    private fun setup() {
         setupBouncyCastle()
         createNotificationChannel()
-
-        val sharedPref = getSharedPreferences( getString(R.string.preference_app_data), Context.MODE_PRIVATE)
-        if (!sharedPref.getBoolean(getString(R.string.is_first_experience), true)) {
-            repository = Repository.getInstance(application)
-            listenUserRewards()
-        }
     }
 
     private fun setupBouncyCastle() {
@@ -68,24 +50,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // TODO make this a service
-    private fun listenUserRewards() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            try {
-                launch(Dispatchers.IO) {
-                    repository.newEarningsEvent()?.subscribe({ event ->
-                        val nm = ContextCompat.getSystemService(
-                            this@MainActivity,
-                            NotificationManager::class.java
-                        ) as NotificationManager
-                        nm.sendNotification(event.earning.toString(), this@MainActivity)
-                    },{ err ->
-                        Log.d("EARNING ERROR", "$err")
-                    })
-                }
-            } catch (ex: Exception) {
-                Log.d("EARNINGS ERROR", ex.message!!)
-            }
-        }
-    }
 }

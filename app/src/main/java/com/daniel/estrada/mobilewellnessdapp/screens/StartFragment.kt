@@ -1,6 +1,7 @@
 package com.daniel.estrada.mobilewellnessdapp.screens
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.daniel.estrada.mobilewellnessdapp.R
+import com.daniel.estrada.mobilewellnessdapp.services.NotificationService
 import com.google.android.material.button.MaterialButton
 
 class StartFragment : Fragment() {
@@ -41,6 +43,9 @@ class StartFragment : Fragment() {
                     FragmentNavigatorExtras(view.findViewById<ImageView>(R.id.image) to getString(R.string.shared_animation))
                 )
             } else {
+                Intent(context, NotificationService::class.java). also { intent ->
+                    requireActivity().startService(intent)
+                }
                 findNavController().navigate(R.id.action_startFragment_to_homeFragment)
             }
         }
