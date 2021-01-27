@@ -1,4 +1,4 @@
-package com.daniel.estrada.mobilewellnessdapp.data
+package com.daniel.estrada.mobilewellnessdapp.repositories
 
 import android.app.Application
 import android.content.Context
@@ -25,6 +25,7 @@ class Repository private constructor(val context: Application){
 
     private val web3j = Web3j.build(HttpService("$BASE_URL"))
     private var credentials: Credentials? = null
+    private val contract: BowheadDevChallenge
     private val gasProvider = object: ContractGasProvider {
         val GAS_PRICE = BigInteger.valueOf(20000000000)
         val GAS_LIMIT = BigInteger.valueOf(6721975)
@@ -33,6 +34,29 @@ class Repository private constructor(val context: Application){
         override fun getGasPrice(): BigInteger = GAS_PRICE
         override fun getGasLimit(contractFunc: String?): BigInteger = GAS_LIMIT
         override fun getGasLimit(): BigInteger = GAS_LIMIT
+    }
+
+    init {
+        contract = BowheadDevChallenge.load(
+            CONTRACT_ADDRESS,
+            web3j,
+            loadCredentials(),
+            gasProvider
+        )
+    }
+
+    private fun loadCredentials(): Credentials? {
+        if (credentials == null) {
+            val sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_app_data),
+                Context.MODE_PRIVATE
+            )
+
+            val walletDir = sharedPref.getString(context.getString(R.string.wallet_directory), null)
+            val password = sharedPref.getString(context.getString(R.string.saved_password), null)
+            credentials = WalletUtils.loadCredentials(password, File(walletDir))
+        }
+        return credentials
     }
 
     fun createWallet(password: String) {
@@ -50,70 +74,21 @@ class Repository private constructor(val context: Application){
         }
     }
 
-    private fun loadCredentials(): Credentials? {
-        if (credentials == null) {
-            val sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_app_data),
-                Context.MODE_PRIVATE
-            )
+    fun sendFunds(): TransactionReceipt? = Transfer.sendFunds(
+        web3j,
+        Credentials.create(MASTER_ACCOUNT_PK),
+        loadCredentials()!!.address,
+        BigDecimal(500000000000000000),
+        Convert.Unit.WEI
+    ).send()
 
-            val walletDir = sharedPref.getString(context.getString(R.string.wallet_directory), null)
-            val password = sharedPref.getString(context.getString(R.string.saved_password), null)
-            credentials = WalletUtils.loadCredentials(password, File(walletDir))
-        }
-        return credentials
-    }
+    fun registerUser(): TransactionReceipt? = contract.registerUser(BigInteger.valueOf(1)).send()
 
-    fun sendFunds(): TransactionReceipt? {
-        return Transfer.sendFunds(
-            web3j,
-            Credentials.create(MASTER_ACCOUNT_PK),
-            loadCredentials()!!.address,
-            BigDecimal(500000000000000000),
-            Convert.Unit.WEI
-        ).send()
-    }
+    fun addHealthData(data: ByteArray): TransactionReceipt? = contract.addHealthData(data).send()
 
-    fun registerUser(): TransactionReceipt? {
-        val contract = BowheadDevChallenge.load(
-            CONTRACT_ADDRESS,
-            web3j,
-            loadCredentials(),
-            gasProvider
-        )
-        return contract.registerUser(BigInteger.valueOf(1)).send()
-    }
-
-    fun addHealthData(data: ByteArray) {
-        val contract = BowheadDevChallenge.load(
-            CONTRACT_ADDRESS,
-            web3j,
-            loadCredentials(),
-            gasProvider
-        )
-
-        contract.addHealthData(data).send()
-    }
-
-    fun getHealthData(): MutableList<Any?>? {
-        val contract = BowheadDevChallenge.load(
-            CONTRACT_ADDRESS,
-            web3j,
-            loadCredentials(),
-            gasProvider
-        )
-
-        return contract.healthData.send()
-    }
+    fun getHealthData(): MutableList<Any?>? = contract.healthData.send()
 
     fun newEarningsEvent(): Flowable<BowheadDevChallenge.NewUserEarningsEventResponse>? {
-        val contract = BowheadDevChallenge.load(
-            CONTRACT_ADDRESS,
-            web3j,
-            loadCredentials(),
-            gasProvider
-        )
-
         return contract.newUserEarningsEventFlowable(
             DefaultBlockParameterName.EARLIEST,
             DefaultBlockParameterName.LATEST

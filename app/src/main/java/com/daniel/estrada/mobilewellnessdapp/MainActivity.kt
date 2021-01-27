@@ -9,11 +9,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.daniel.estrada.mobilewellnessdapp.data.Repository
+import com.daniel.estrada.mobilewellnessdapp.repositories.Repository
 import com.daniel.estrada.mobilewellnessdapp.utils.sendNotification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.security.Provider
 import java.security.Security
@@ -68,14 +67,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // TODO make this a service
     private fun listenUserRewards() {
         lifecycleScope.launch(Dispatchers.Main) {
             try {
                 launch(Dispatchers.IO) {
                     repository.newEarningsEvent()?.subscribe({ event ->
                         val nm = ContextCompat.getSystemService(
-                                this@MainActivity,
-                                NotificationManager::class.java
+                            this@MainActivity,
+                            NotificationManager::class.java
                         ) as NotificationManager
                         nm.sendNotification(event.earning.toString(), this@MainActivity)
                     },{ err ->
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                     })
                 }
             } catch (ex: Exception) {
-                Log.d("EARNINGS", ex.message!!)
+                Log.d("EARNINGS ERROR", ex.message!!)
             }
         }
     }

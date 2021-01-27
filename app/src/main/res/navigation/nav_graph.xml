@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.daniel.estrada.mobilewellnessdapp.screens.welcome.StartFragment"
+        android:name="com.daniel.estrada.mobilewellnessdapp.screens.StartFragment"
         android:label="fragment_start"
         tools:layout="@layout/fragment_start" >
         <action
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/createPasswordFragment"
-        android:name="com.daniel.estrada.mobilewellnessdapp.screens.welcome.CreatePasswordFragment"
+        android:name="com.daniel.estrada.mobilewellnessdapp.screens.CreatePasswordFragment"
         android:label="fragment_create_password"
         tools:layout="@layout/fragment_create_password" >
         <action

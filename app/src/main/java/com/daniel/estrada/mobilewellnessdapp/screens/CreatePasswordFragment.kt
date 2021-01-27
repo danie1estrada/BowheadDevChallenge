@@ -1,6 +1,5 @@
-package com.daniel.estrada.mobilewellnessdapp.screens.welcome
+package com.daniel.estrada.mobilewellnessdapp.screens
 
-import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
@@ -13,20 +12,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.daniel.estrada.mobilewellnessdapp.R
-import com.daniel.estrada.mobilewellnessdapp.data.Repository
+import com.daniel.estrada.mobilewellnessdapp.repositories.Repository
 import com.daniel.estrada.mobilewellnessdapp.databinding.FragmentCreatePasswordBinding
 import com.daniel.estrada.mobilewellnessdapp.viewmodels.PasswordViewModel
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
-import org.web3j.crypto.WalletUtils
 
 
 class CreatePasswordFragment : Fragment() {
 
     private val viewModel: PasswordViewModel by viewModels()
     private lateinit var binding: FragmentCreatePasswordBinding
-    private lateinit var filePath: String
     private lateinit var repository: Repository
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,14 +39,14 @@ class CreatePasswordFragment : Fragment() {
     }
 
     private fun setup() {
+        repository = Repository.getInstance(requireActivity().application)
+
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
         binding.buttonLetsGo.setOnClickListener {
             createWallet()
         }
-
-        repository = Repository.getInstance(requireActivity().application)
     }
 
     private fun createWallet() {

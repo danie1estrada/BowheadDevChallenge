@@ -30,16 +30,12 @@
 
                 <ImageButton
                     android:id="@+id/buttonBack"
-                    style="@style/imageButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:backgroundTint="#FFFFFF"
-                    android:src="@drawable/ic_grupo_508"
-                    android:background="@null"
-                    android:padding="0dp"
+                    android:src="@drawable/grupo_508"
+                    android:background="@android:color/transparent"
                     app:iconTint="?android:attr/textColor" />
-
 
                 <TextView
                     android:layout_width="wrap_content"

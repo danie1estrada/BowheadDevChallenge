@@ -1,4 +1,4 @@
-package com.daniel.estrada.mobilewellnessdapp.screens.welcome
+package com.daniel.estrada.mobilewellnessdapp.screens
 
 import android.content.Context
 import android.os.Bundle

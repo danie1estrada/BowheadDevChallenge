@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".screens.welcome.StartFragment">
+    tools:context=".screens.StartFragment">
 
     <ImageView
         android:layout_width="wrap_content"

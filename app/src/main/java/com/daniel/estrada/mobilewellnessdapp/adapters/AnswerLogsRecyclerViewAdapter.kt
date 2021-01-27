@@ -32,8 +32,8 @@ class AnswerLogsRecyclerViewAdapter: RecyclerView.Adapter<AnswerLogsRecyclerView
         }
 
         holder.didSleepWell.text = when(data[1]) {
-            context.getString(R.string.value_group_2_opt_1) -> context.getString(R.string.label_group_2_opt_1)
-            context.getString(R.string.value_group_2_opt_2) -> context.getString(R.string.label_group_2_opt_2)
+            context.getString(R.string.value_group_2_opt_1) -> "Good"
+            context.getString(R.string.value_group_2_opt_2) -> "Bad"
             else -> ""
         }
     }
