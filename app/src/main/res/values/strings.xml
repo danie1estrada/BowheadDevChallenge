@@ -32,6 +32,12 @@
     <string name="label_title">Answer Logs</string>
     <string name="label_feeling">Feeling:</string>
     <string name="label_sleep_quality">Sleep quality:</string>
+    
+    <!-- SharedPreferences -->
+    <string name="preference_app_data">preferenceAppData</string>
+    <string name="is_first_experience">isFirstExperience</string>
+    <string name="wallet_directory">walletDirectory</string>
+    <string name="saved_password">password</string>
 
     <!-- ViewModel -->
     <string name="value_group_1_opt_1">FIRST</string>
@@ -40,4 +46,11 @@
 
     <string name="value_group_2_opt_1">YES</string>
     <string name="value_group_2_opt_2">NO</string>
+
+    <!-- NotificationChannel -->
+    <string name="channel_id">dev_challenge_channel</string>
+    <string name="channel_name">Dev Challenge</string>
+    <string name="channel_description">New reward earned</string>
+    <string name="notification_title">New reward!</string>
+    <string name="notification_content">...</string>
 </resources>

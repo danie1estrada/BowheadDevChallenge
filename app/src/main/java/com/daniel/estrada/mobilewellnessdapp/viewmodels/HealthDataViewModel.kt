@@ -1,20 +1,13 @@
 package com.daniel.estrada.mobilewellnessdapp.viewmodels
 
-import android.view.View
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.google.android.material.snackbar.Snackbar
 
 class HealthDataViewModel : ViewModel() {
 
     val feeling = MutableLiveData<String>()
     val didSleepWell = MutableLiveData<String>()
-
-    fun isCompleted(): LiveData<Boolean>? {
-        return Transformations.map(feeling) { it.isNotEmpty() }
-    }
+    val isLoading = MutableLiveData<Boolean>(false)
 
     fun setFeeling(value: String) {
         feeling.value = value
@@ -24,11 +17,14 @@ class HealthDataViewModel : ViewModel() {
         didSleepWell.value = value
     }
 
-    fun submit(view: View) {
-        Snackbar.make(
-            view,
-            "FEELING: ${feeling.value}, SLEEP: ${didSleepWell.value}",
-            Snackbar.LENGTH_LONG
-        ).show()
+    fun getDataAsBytes(): ByteArray {
+        val plainTextData = "${feeling.value} ${didSleepWell.value}"
+        val spaces = Array(32 - plainTextData.length) { " " }.joinToString(separator = "")
+        return "$plainTextData$spaces".toByteArray()
+    }
+
+    fun clear() {
+        feeling.value = ""
+        didSleepWell.value = ""
     }
 }

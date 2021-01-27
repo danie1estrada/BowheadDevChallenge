@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
         <import type="android.text.TextUtils" />
 
         <variable
@@ -15,112 +17,138 @@
         android:layout_height="match_parent"
         tools:context=".screens.home.WellnessTrackingFragment">
 
-        <ScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <ScrollView
+                android:id="@+id/scrollView2"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:src="@drawable/grupo_660"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/label_track_your_wellness"
+                        android:textSize="24sp" />
+
+                    <View
+                        style="@style/divider"
+                        android:layout_width="match_parent" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/label_question_1"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{TextUtils.equals(viewmodel.feeling, @string/value_group_1_opt_1)}"
+                            android:fontFamily="@font/poppins"
+                            android:onClick="@{() -> viewmodel.setFeeling(@string/value_group_1_opt_1)}"
+                            android:enabled="@{!viewmodel.isLoading}"
+                            android:text="@string/label_group_1_opt_1" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{TextUtils.equals(viewmodel.feeling, @string/value_group_1_opt_2)}"
+                            android:onClick="@{() -> viewmodel.setFeeling(@string/value_group_1_opt_2)}"
+                            android:enabled="@{!viewmodel.isLoading}"
+                            android:text="@string/label_group_1_opt_2" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{TextUtils.equals(viewmodel.feeling, @string/value_group_1_opt_3)}"
+                            android:onClick="@{() -> viewmodel.setFeeling(@string/value_group_1_opt_3)}"
+                            android:enabled="@{!viewmodel.isLoading}"
+                            android:text="@string/label_group_1_opt_3" />
+                    </RadioGroup>
+
+                    <View
+                        style="@style/divider"
+                        android:layout_width="match_parent" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/label_question_2"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{TextUtils.equals(viewmodel.didSleepWell, @string/value_group_2_opt_1)}"
+                            android:onClick="@{() -> viewmodel.setDidSleepWell(@string/value_group_2_opt_1)}"
+                            android:enabled="@{!viewmodel.isLoading}"
+                            android:text="@string/label_group_2_opt_1" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{TextUtils.equals(viewmodel.didSleepWell, @string/value_group_2_opt_2)}"
+                            android:onClick="@{() -> viewmodel.setDidSleepWell(@string/value_group_2_opt_2)}"
+                            android:enabled="@{!viewmodel.isLoading}"
+                            android:text="@string/label_group_2_opt_2" />
+                    </RadioGroup>
+
+                    <View
+                        style="@style/divider"
+                        android:layout_width="match_parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="80dp"
+                        android:layout_marginBottom="16dp"
+                        android:enabled="@{!TextUtils.isEmpty(viewmodel.feeling) &amp;&amp; !TextUtils.isEmpty(viewmodel.didSleepWell) &amp;&amp; !viewmodel.isLoading}"
+                        android:text="@string/button_submit"
+                        android:textAllCaps="false" />
+
+                </LinearLayout>
+            </ScrollView>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="@{viewmodel.isLoading ? View.VISIBLE : View.GONE}"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
-                    android:src="@drawable/grupo_660"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:text="@string/label_track_your_wellness"
-                    android:textSize="24sp" />
-
-                <View
-                    style="@style/divider"
-                    android:layout_width="match_parent" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="@string/label_question_1"
-                    android:textSize="20sp" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="@string/label_group_1_opt_1"
-                        android:onClick="@{() -> viewmodel.setFeeling(@string/value_group_1_opt_1)}"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_group_1_opt_2"
-                        android:onClick="@{() -> viewmodel.setFeeling(@string/value_group_1_opt_2)}" />
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_group_1_opt_3"
-                        android:onClick="@{() -> viewmodel.setFeeling(@string/value_group_1_opt_3)}" />
-                </RadioGroup>
-
-                <View
-                    style="@style/divider"
-                    android:layout_width="match_parent" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="@string/label_question_2"
-                    android:textSize="20sp" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_group_2_opt_1"
-                        android:onClick="@{() -> viewmodel.setDidSleepWell(@string/value_group_2_opt_1)}"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_group_2_opt_2"
-                        android:onClick="@{() -> viewmodel.setDidSleepWell(@string/value_group_2_opt_2)}"/>
-                </RadioGroup>
-
-                <View
-                    style="@style/divider"
-                    android:layout_width="match_parent" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="80dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="@string/button_submit"
-                    android:enabled="@{!TextUtils.isEmpty(viewmodel.feeling) &amp;&amp; !TextUtils.isEmpty(viewmodel.didSleepWell)}"
-                    android:onClick="@{viewmodel.submit}"
-                    android:textAllCaps="false" />
-
-            </LinearLayout>
-        </ScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

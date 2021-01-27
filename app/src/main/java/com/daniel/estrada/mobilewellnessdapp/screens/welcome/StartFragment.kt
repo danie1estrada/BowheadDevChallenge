@@ -1,5 +1,6 @@
 package com.daniel.estrada.mobilewellnessdapp.screens.welcome
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,13 +24,26 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setup(view)
+    }
+
+    private fun setup(view: View) {
+        val sharedPref = requireActivity().getSharedPreferences(
+            getString(R.string.preference_app_data), Context.MODE_PRIVATE
+        )
+
         view.findViewById<MaterialButton>(R.id.buttonStart).setOnClickListener {
-            findNavController().navigate(
-                R.id.action_startFragment_to_createPasswordFragment,
-                null,
-                null,
-                FragmentNavigatorExtras(view.findViewById<ImageView>(R.id.image) to getString(R.string.shared_animation))
-            )
+            if (sharedPref.getBoolean(getString(R.string.is_first_experience), true)) {
+                findNavController().navigate(
+                    R.id.action_startFragment_to_createPasswordFragment,
+                    null,
+                    null,
+                    FragmentNavigatorExtras(view.findViewById<ImageView>(R.id.image) to getString(R.string.shared_animation))
+                )
+            } else {
+                findNavController().navigate(R.id.action_startFragment_to_homeFragment)
+            }
         }
     }
+
 }
